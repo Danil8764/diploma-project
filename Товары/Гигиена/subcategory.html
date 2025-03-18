@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подкатегория</title>
+    <link rel="stylesheet" href="../../styles/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="../../index.html">Главная</a></li>
+                <li><a href="../../index.html#products">Товары</a></li>
+                <li><a href="../../index.html#delivery">Доставка</a></li>
+                <li><a href="../../index.html#contacts">Контакты</a></li>
+                <li>
+                    <a href="../../cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="subcategory" class="subcategory">
+        <h2 id="subcategory-name">Подкатегория</h2>
+        <div class="product-list">
+            <!-- Товары будут загружены сюда -->
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Эва Плюс. Все права защищены.</p>
+    </footer>
+
+    <script>
+        // Получаем параметр из URL (например, ?file=data/Бумажные_полотенца_и_салфетки.json)
+        const urlParams = new URLSearchParams(window.location.search);
+        const dataFile = urlParams.get('file');
+
+        // Загрузка данных из JSON-файла
+        document.addEventListener('DOMContentLoaded', function () {
+            if (dataFile) {
+                fetch(dataFile)
+                    .then(response => response.json())
+                    .then(data => {
+                        const subcategoryName = document.getElementById('subcategory-name');
+                        const productList = document.querySelector('.product-list');
+
+                        if (subcategoryName && productList) {
+                            // Устанавливаем название подкатегории
+                            subcategoryName.textContent = data.name || "Подкатегория";
+
+                            // Отображаем товары
+                            data.products.forEach(product => {
+                                const productItem = document.createElement('div');
+                                productItem.classList.add('product-item');
+                                productItem.innerHTML = `
+                                    <h3>${product.name}</h3>
+                                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                                    <p>${product.description}</p>
+                                    <p>Цена: ${product.price} руб.</p>
+                                    <p>Осталось: ${product.stock} шт.</p>
+                                    <div class="add-to-cart">
+                                        <label for="quantity-${product.id}">Количество:</label>
+                                        <input type="number" id="quantity-${product.id}" min="1" max="${product.stock}" value="1">
+                                        <button onclick="addToCart(${product.id}, '${dataFile}')">Добавить в корзину</button>
+                                    </div>
+                                `;
+                                productList.appendChild(productItem);
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Ошибка загрузки данных:', error));
+            } else {
+                console.error('Файл данных не указан.');
+            }
+        });
+
+        // Функция для добавления товара в корзину
+        function addToCart(productId, dataFile) {
+    fetch(dataFile)
+        .then(response => response.json())
+        .then(data => {
+            const product = data.products.find(item => item.id === productId);
+            const quantity = parseInt(document.getElementById(`quantity-${productId}`).value, 10);
+
+            if (quantity > 0 && quantity <= product.stock) {
+                let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const existingItemIndex = cart.findIndex(item => item.id === productId);
+
+                if (existingItemIndex !== -1) {
+                    if (cart[existingItemIndex].quantity + quantity <= product.stock) {
+                        cart[existingItemIndex].quantity += quantity;
+                    } else {
+                        alert('Недостаточно товара на складе!');
+                        return;
+                    }
+                } else {
+                    cart.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: quantity,
+                        stock: product.stock
+                    });
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
+                alert('Успешно!'); // Новое сообщение
+                updateCartCount();
+            } else {
+                alert('Некорректное количество!');
+            }
+        })
+        .catch(error => console.error('Ошибка загрузки товаров:', error));
+}
+
+        // Функция для обновления количества товаров в корзине
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCountElement = document.getElementById('cart-count');
+            if (cartCountElement) {
+                cartCountElement.textContent = cart.length;
+            }
+        }
+    </script>
+</body>
+</html>

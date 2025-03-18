@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Эва Плюс</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="index.html#products">Товары</a></li>
+                <li><a href="index.html#delivery">Доставка</a></li>
+                <li><a href="index.html#contacts">Контакты</a></li>
+                <li>
+                    <a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="cart">
+        <h2>Корзина</h2>
+        <div class="cart-items">
+            <!-- Товары будут отображаться здесь -->
+        </div>
+
+        <!-- Общая сумма заказа -->
+        <div class="total-amount">
+            <h3>Общая сумма заказа: <span id="total-amount-value">0</span> руб.</h3>
+        </div>
+
+        <!-- Выбор способа оплаты -->
+        <div class="payment-method">
+            <h3>Способ оплаты:</h3>
+            <label>
+                <input type="radio" name="payment-method" value="cash" checked> При получении (наличными)
+            </label>
+            <label>
+                <input type="radio" name="payment-method" value="qr"> QR-код
+            </label>
+        </div>
+
+        <!-- Кнопка "Оплатить" -->
+        <button class="pay-button" onclick="handlePayment()">Оплатить</button>
+
+        <!-- Блок для отображения результата оплаты -->
+        <div id="payment-result" class="payment-result"></div>
+
+        <!-- Форма оформления заказа -->
+        <form id="order-form">
+            <h3>Оформление заказа</h3>
+            
+            <div class="form-group">
+                <label for="name">Имя:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="surname">Фамилия:</label>
+                <input type="text" id="surname" name="surname" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="address">Адрес:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="delivery-time">Время доставки:</label>
+                <select id="delivery-time" name="delivery-time" required>
+                    <option value="24">24 часа (Курьерская доставка)</option>
+                    <option value="72">3-7 дней (Почта России)</option>
+                </select>
+            </div>
+    
+            <button type="submit">Оформить заказ</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Эва Плюс. Все права защищены.</p>
+    </footer>
+
+    <script src="scripts/script.js"></script>
+</body>
+</html>
