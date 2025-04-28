@@ -12,7 +12,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #0078d7; /* Основной цвет сайта */
+            background-color: #0078d7;
             color: white;
             padding: 15px 20px;
             border-radius: 5px;
@@ -25,7 +25,7 @@
         }
 
         .custom-notification.error {
-            background-color: #ff5722; /* Акцентный цвет для ошибок */
+            background-color: #ff5722;
         }
 
         @keyframes slideIn {
@@ -387,7 +387,8 @@
                                 price: product.price,
                                 quantity: quantity,
                                 stock: product.stock,
-                                image: product.image
+                                image: product.image,
+                                category: data.name // Добавляем название категории для фильтрации в корзине
                             });
                         }
 
